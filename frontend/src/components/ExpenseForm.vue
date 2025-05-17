@@ -4,6 +4,20 @@
     <form @submit.prevent="addExpense">
       <input v-model="description" placeholder="Description" required />
       <input v-model="amount" type="number" placeholder="Amount" required />
+      <select v-model="category" required>
+        <option disabled value="">Select category</option>
+        <option>EDUCATION</option>
+        <option>ENTERTAINMENT</option>
+        <option>FOOD</option>
+        <option>HEALTH</option>
+        <option>HOUSEHOLD</option>
+        <option>PERSONAL</option>
+        <option>SHOPPING</option>
+        <option>TRANSPORT</option>
+        <option>TRAVEL</option>
+        <option>UTILITIES</option>
+        <option>WORK</option>
+      </select>
       <input v-model="date" type="date" required />
       <button type="submit">Add</button>
     </form>
@@ -18,26 +32,29 @@ export default {
     return {
       description: '',
       amount: 0,
-      date: ''
+      date: '',
+      category: ''
     };
   },
   methods: {
     addExpense() {
       const auth = localStorage.getItem('auth');
-      axios.post('http://localhost:8080/api/expenses', {
+      axios.post('http://localhost:8080/api/expenses/create', {
         description: this.description,
         amount: this.amount,
-        date: this.date
+        date: this.date,
+        category: this.category || null
       }, {
         headers: { 'Authorization': `Basic ${auth}` }
       })
-      .then(() => {
-        this.$emit('expense-added');
-        this.description = '';
-        this.amount = 0;
-        this.date = '';
-      })
-      .catch(error => console.error(error));
+        .then(() => {
+          this.$emit('expense-added');
+          this.description = '';
+          this.amount = 0;
+          this.date = '';
+          this.category = '';
+        })
+        .catch(error => console.error(error));
     }
   }
 };

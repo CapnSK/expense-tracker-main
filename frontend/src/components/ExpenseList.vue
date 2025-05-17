@@ -4,7 +4,7 @@
     <expense-form @expense-added="fetchExpenses" />
     <ul>
       <li v-for="expense in expenses" :key="expense.id">
-        {{ expense.description }} - {{ expense.amount }} - {{ expense.date }}
+        {{ expense.description }} - {{ expense.amount }} - {{ expense.date }} - {{ expense.category }}
         <button @click="deleteExpense(expense.id)">Delete</button>
       </li>
     </ul>
@@ -29,11 +29,11 @@ export default {
   methods: {
     fetchExpenses() {
       const auth = localStorage.getItem('auth');
-      // if (!auth) {
-      //   this.$router.push('/');
-      //   return;
-      // }
-      axios.get('http://localhost:8080/api/expenses', {
+      if (!auth) {
+        this.$router.push('/');
+        return;
+      }
+      axios.get('http://localhost:8080/api/expenses/all', {
         headers: { 'Authorization': `Basic ${auth}` }
       })
       .then(response => {
