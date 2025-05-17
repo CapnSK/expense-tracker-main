@@ -19,6 +19,8 @@ public class Expense {
 
     private Double amount;
     private LocalDate date;
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean deleted = false;
 
     // Constructors
     public Expense() {
@@ -69,5 +71,13 @@ public class Expense {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

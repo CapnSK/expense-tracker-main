@@ -22,9 +22,10 @@ public class ExpenseController {
             @RequestParam(required = false) String category, // for filtering
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "date,desc") String[] sort // e.g. sort=date,desc
+            @RequestParam(defaultValue = "date,desc") String[] sort, // e.g. sort=date,desc
+            @RequestParam(defaultValue = "false") Boolean archived
     ) {
-        return expenseService.getExpenses(keyword, category, page, size, sort);
+        return expenseService.getExpenses(keyword, category, page, size, sort, archived);
     }
 
     @GetMapping("/all")

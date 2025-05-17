@@ -25,19 +25,19 @@ public class ExpenseService {
         return expenseRepository.findAll();
     }
 
-    public Page<Expense> getExpenses(String keyword, String category, int page, int size, String[] sort) {
+    public Page<Expense> getExpenses(String keyword, String category, int page, int size, String[] sort, Boolean archived) {
         Sort.Direction direction = sort[1].equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
 
-        if (keyword != null && !keyword.isEmpty() && category != null && !category.isEmpty()) {
-            return expenseRepository.findByDescriptionContainingIgnoreCaseAndCategory(keyword, category, pageable);
-        } else if (keyword != null && !keyword.isEmpty()) {
-            return expenseRepository.findByDescriptionContainingIgnoreCase(keyword, pageable);
-        } else if (category != null && !category.isEmpty()) {
-            return expenseRepository.findByCategory(category, pageable);
-        } else {
-            return expenseRepository.findAll(pageable);
+        // Normalize empty strings to null
+        if (keyword != null && keyword.trim().isEmpty()) {
+            keyword = null;
         }
+        if (category != null && category.trim().isEmpty()) {
+            category = null;
+        }
+
+        return expenseRepository.searchAndFilter(keyword, category, archived, pageable);
     }
 
     public Expense getExpenseById(Long id) {
@@ -56,10 +56,14 @@ public class ExpenseService {
     }
 
     public void deleteExpense(Optional<Long> id) {
-        if(id.isEmpty()){
+        if (id.isEmpty()) {
             expenseRepository.deleteAll();
-            return; 
+            return;
         }
-        expenseRepository.deleteById(id.get());
+        Expense expense = expenseRepository.findById(id.get())
+                .orElseThrow(() -> new RuntimeException("Expense not found id: " + id.get()));
+
+        expense.setDeleted(true);
+        expenseRepository.save(expense);
     }
 }

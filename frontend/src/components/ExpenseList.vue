@@ -31,6 +31,11 @@
         <option value="10">10 / page</option>
         <option value="20">20 / page</option>
       </select>
+
+      <button @click="toggleArchived">
+        {{ showArchived ? 'Show Active' : 'Show Archived' }}
+      </button>
+
       <button @click="applyFilters">Search</button>
       <button @click="clearFilters">Clear</button>
     </div>
@@ -39,7 +44,7 @@
     <ul>
       <li v-for="expense in expenses" :key="expense.id">
         {{ expense.description }} - {{ expense.amount }} - {{ expense.date }} - {{ expense.category }}
-        <button @click="deleteExpense(expense.id)">Delete</button>
+        <button v-if="!showArchived" @click="archiveExpense(expense.id)">Archive</button>
       </li>
     </ul>
 
@@ -73,7 +78,8 @@ export default {
       size: 5,
       hasMore: false,
       totalElements: 0,
-      totalPages: 0
+      totalPages: 0,
+      showArchived: false
     };
   },
   computed: {
@@ -97,6 +103,12 @@ export default {
       this.category = '';
       this.sort = 'date,desc';
       this.page = 0;
+      this.showArchived = false;
+      this.fetchExpenses();
+    },
+    toggleArchived() {
+      this.showArchived = !this.showArchived;
+      this.page = 0;
       this.fetchExpenses();
     },
     fetchExpenses() {
@@ -107,7 +119,8 @@ export default {
           category: this.category,
           page: this.page,
           size: this.size,
-          sort: this.sort
+          sort: this.sort,
+          archived: this.showArchived
         },
         headers: { 'Authorization': `Basic ${auth}` }
       })
@@ -119,7 +132,7 @@ export default {
         })
         .catch(err => console.error(err));
     },
-    deleteExpense(id) {
+    archiveExpense(id) {
       const auth = localStorage.getItem('auth');
       axios.delete(`http://localhost:8080/api/expenses/${id}`, {
         headers: { 'Authorization': `Basic ${auth}` }
