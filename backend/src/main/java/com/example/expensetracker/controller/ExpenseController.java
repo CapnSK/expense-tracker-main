@@ -17,14 +17,14 @@ public class ExpenseController {
     private ExpenseService expenseService;
 
     @GetMapping
-    public List<Expense> getExpenses(
+    public Page<Expense> getExpenses(
             @RequestParam(required = false) String keyword, // for search
             @RequestParam(required = false) String category, // for filtering
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "date,desc") String[] sort // e.g. sort=date,desc
     ) {
-        return expenseService.getExpenses(keyword, category, page, size, sort).getContent();
+        return expenseService.getExpenses(keyword, category, page, size, sort);
     }
 
     @GetMapping("/all")
