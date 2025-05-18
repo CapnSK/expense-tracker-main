@@ -1,6 +1,9 @@
 <template>
   <div>
     <h2>Add Expense</h2>
+    <div v-if="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
     <form @submit.prevent="addExpense">
       <input v-model="description" placeholder="Description" required />
       <input v-model="amount" type="number" placeholder="Amount" required />
@@ -33,7 +36,8 @@ export default {
       description: '',
       amount: 0,
       date: '',
-      category: ''
+      category: '',
+      errorMessage: ''
     };
   },
   methods: {
@@ -53,9 +57,24 @@ export default {
           this.amount = 0;
           this.date = '';
           this.category = '';
+          this.errorMessage = '';
         })
-        .catch(error => console.error(error));
+        .catch(error => {
+          if (error.response && error.response.status === 400) {
+            this.errorMessage = error.response.data;
+          } else {
+            console.error(error);
+            this.errorMessage = 'An unexpected error occurred.';
+          }
+        });
     }
   }
 };
 </script>
+
+<style scoped>
+.error-message {
+  color: red;
+  margin-bottom: 1rem;
+}
+</style>
