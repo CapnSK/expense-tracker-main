@@ -1,11 +1,13 @@
 package com.example.expensetracker.model;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDate;
 
 @Entity
 public class Expense {
@@ -30,6 +32,15 @@ public class Expense {
         this.description = description;
         this.amount = amount;
         this.date = date;
+    }
+    
+    public Expense(Long id, String description, Double amount, String category, Date date, Boolean archived) {
+        this.id = id;
+        this.description = description;
+        this.amount = amount;
+        this.category = category;
+        this.date = date == null ? null : LocalDate.ofEpochDay(date.getTime());
+        this.deleted = archived;
     }
 
     // Getters and Setters
