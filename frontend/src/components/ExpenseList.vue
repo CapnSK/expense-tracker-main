@@ -42,7 +42,6 @@
 
     <!-- Expense List -->
     <ul>
-      </li> -->
       <li class="expense-row" v-for="expense in expenses" :key="expense.id">
         <div class="expense-details">
           <div class="expense-name">{{ expense.description }} | <small>{{ expense.amount }} CAD</small></div>
