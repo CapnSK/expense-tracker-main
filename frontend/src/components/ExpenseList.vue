@@ -190,13 +190,14 @@ h1 {
 }
 
 .category-tag {
-  padding: 4px 8px;
+  padding: 2px 4px;
   border-radius: 4px;
   color: white;
   font-weight: 600;
-  font-size: 0.85rem;
   display: inline-block;
   width: fit-content;
+  font-size: xx-small;
+  margin-top: 0.3em;
 }
 
 /* Category color classes */
