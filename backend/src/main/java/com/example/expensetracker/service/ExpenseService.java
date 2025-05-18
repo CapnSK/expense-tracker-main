@@ -1,5 +1,6 @@
 package com.example.expensetracker.service;
 
+import com.example.expensetracker.exceptions.ExpenseNotFoundException;
 import com.example.expensetracker.exceptions.InvalidExpenseException;
 import com.example.expensetracker.model.Expense;
 import com.example.expensetracker.repository.ExpenseRepository;
@@ -72,7 +73,7 @@ public class ExpenseService {
             return;
         }
         Expense expense = expenseRepository.findById(id.get())
-                .orElseThrow(() -> new RuntimeException("Expense not found id: " + id.get()));
+                .orElseThrow(() -> new ExpenseNotFoundException("Expense not found id: " + id.get()));
 
         expense.setDeleted(true);
         expenseRepository.save(expense);
