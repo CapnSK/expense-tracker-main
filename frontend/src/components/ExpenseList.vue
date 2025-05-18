@@ -3,42 +3,16 @@
     <h1>Expenses</h1>
     <expense-form @expense-added="fetchExpenses" />
 
-    <!-- Toolbar (add dropdown for page size) -->
-    <div class="toolbar">
-      <input v-model="keyword" placeholder="Search description" />
-      <select v-model="category">
-        <option value="">All Categories</option>
-        <option>EDUCATION</option>
-        <option>ENTERTAINMENT</option>
-        <option>FOOD</option>
-        <option>HEALTH</option>
-        <option>HOUSEHOLD</option>
-        <option>PERSONAL</option>
-        <option>SHOPPING</option>
-        <option>TRANSPORT</option>
-        <option>TRAVEL</option>
-        <option>UTILITIES</option>
-        <option>WORK</option>
-      </select>
-      <select v-model="sort">
-        <option value="date,desc">Date Desc</option>
-        <option value="date,asc">Date Asc</option>
-        <option value="amount,desc">Amount Desc</option>
-        <option value="amount,asc">Amount Asc</option>
-      </select>
-      <select v-model="size" @change="page = 0; fetchExpenses()">
-        <option value="5">5 / page</option>
-        <option value="10">10 / page</option>
-        <option value="20">20 / page</option>
-      </select>
-
-      <button @click="applyFilters">Search</button>
-      <button @click="clearFilters">Clear</button> 
-      &nbsp;
-      <button @click="toggleArchived">
-        {{ showArchived ? 'Show Active' : 'Show Archived' }}
-      </button>
-    </div>
+    <ToolbarView
+      :keyword="keyword"
+      :category="category"
+      :sort="sort"
+      :size="size"
+      :showArchived="showArchived"
+      @apply="handleApply"
+      @clear="clearFilters"
+      @toggle-archived="toggleArchived"
+    />
 
     <!-- Expense List -->
     <ul>
@@ -67,9 +41,10 @@
 <script>
 import axios from 'axios';
 import ExpenseForm from './ExpenseForm.vue';
+import ToolbarView from './ToolbarView.vue';
 
 export default {
-  components: { ExpenseForm },
+  components: { ExpenseForm, ToolbarView },
   data() {
     return {
       expenses: [],
@@ -140,7 +115,15 @@ export default {
         headers: { 'Authorization': `Basic ${auth}` }
       }).then(() => this.fetchExpenses())
         .catch(err => console.error(err));
-    }
+    },
+    handleApply({ keyword, category, sort, size }) {
+      this.keyword = keyword;
+      this.category = category;
+      this.sort = sort;
+      this.size = size;
+      this.page = 0;
+      this.fetchExpenses();
+    },
   }
 };
 </script>
@@ -203,7 +186,7 @@ h1 {
 }
 
 .archive-btn:hover {
-  background-color: #217dbb;
+  background-color: #9a2323;
 }
 
 .category-tag {
