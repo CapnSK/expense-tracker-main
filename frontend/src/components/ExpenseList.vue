@@ -33,8 +33,8 @@
       </select>
 
       <button @click="applyFilters">Search</button>
-      <button @click="clearFilters">Clear</button>
-
+      <button @click="clearFilters">Clear</button> 
+      &nbsp;
       <button @click="toggleArchived">
         {{ showArchived ? 'Show Active' : 'Show Archived' }}
       </button>
@@ -61,8 +61,6 @@
       <button :disabled="page === 0" @click="page--; fetchExpenses()">Previous</button>
       <button :disabled="!hasMore" @click="page++; fetchExpenses()">Next</button>
     </div>
-
-    <button @click="logout">Logout</button>
   </div>
 </template>
 
@@ -142,10 +140,6 @@ export default {
         headers: { 'Authorization': `Basic ${auth}` }
       }).then(() => this.fetchExpenses())
         .catch(err => console.error(err));
-    },
-    logout() {
-      localStorage.removeItem('auth');
-      this.$router.push('/login');
     }
   }
 };
@@ -198,7 +192,7 @@ h1 {
 
 .archive-btn {
   padding: 6px 14px;
-  background-color: #3498db;
+  background-color: #c12b2b;
   color: white;
   border: none;
   border-radius: 9999px;

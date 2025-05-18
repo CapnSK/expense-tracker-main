@@ -1,6 +1,9 @@
 <template>
   <div>
-    <h3>Add Expense</h3>
+    <div class = "header">
+      <h3>Add Expense</h3>
+      <button @click="logout">Logout</button>
+    </div>
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
@@ -67,6 +70,10 @@ export default {
             this.errorMessage = 'An unexpected error occurred.';
           }
         });
+    },
+    logout() {
+      localStorage.removeItem('auth');
+      this.$router.push('/login');
     }
   }
 };
@@ -76,5 +83,12 @@ export default {
 .error-message {
   color: red;
   margin-bottom: 1rem;
+}
+.header {
+  display: flex; 
+  justify-content: space-between;
+}
+.header button {
+ background-color: rgb(186, 186, 186); 
 }
 </style>
