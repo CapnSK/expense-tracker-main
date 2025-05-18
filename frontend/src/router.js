@@ -9,6 +9,7 @@ export default new Router({
   mode: 'history',
   routes: [
     { path: '/', name: 'login', component: UserLogin },
+    { path: '/login', name: 'login', component: UserLogin },
     { path: '/expenses', name: 'expenses', component: ExpenseList }
   ]
 });

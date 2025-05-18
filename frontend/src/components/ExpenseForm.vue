@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Add Expense</h2>
+    <h3>Add Expense</h3>
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
